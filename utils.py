@@ -55,9 +55,14 @@ def plot_comparison(
     Args:
         results_dir: Directory containing result CSV files.
         filter: Optional substring to filter which CSVs to include.
-            For example 'cifar100' to plot only CIFAR-100 results.
+            For example 'cifar10' to plot only CIFAR-10 results.
     """
-    files = glob.glob(f"{results_dir}/*{filter}*_results.csv")
+    files = glob.glob(f"{results_dir}/*_results.csv")
+    
+    # Filter files that end with exactly the filter string before _results.csv
+    if filter:
+        files = [f for f in files if f.replace("_results.csv", "").endswith(filter)]
+    
     fig, ax = plt.subplots(figsize=(8, 5))
     for f in files:
         df = pd.read_csv(f)
@@ -68,5 +73,5 @@ def plot_comparison(
     ax.set_ylabel("Accuracy (%)")
     ax.legend()
     plt.tight_layout()
-    plt.savefig(f"{results_dir}/comparison{filter}.png")
+    plt.savefig(f"{results_dir}/comparison_{filter}.png")
     plt.close()

@@ -25,7 +25,7 @@ def get_args() -> argparse.Namespace:
         description="MLP-Mixer vs EfficientNet comparison"
     )
     parser.add_argument("--model", type=str, default="mixer",
-                        choices=["mixer", "efficientnet", "mixer_pretrained"])
+                        choices=["mixer", "efficientnet", "mixer_pretrained", "resnet"])
     parser.add_argument("--dataset", type=str, default="cifar10",
                         choices=["cifar10", "cifar100"])
     parser.add_argument("--epochs", type=int, default=30)
@@ -113,6 +113,11 @@ def main() -> None:
     elif args.model == "mixer_pretrained":
         from models.mixer_pretrained import get_pretrained_mixer
         model = get_pretrained_mixer(num_classes=num_classes)
+
+    elif args.model == "resnet":
+        from models.efficientnet import get_resnet
+        model = get_resnet(num_classes=num_classes, pretrained=args.pretrained)
+
     else:
         model = get_efficientnet(
             num_classes=num_classes, pretrained=args.pretrained
